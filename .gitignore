@@ -1,0 +1,43 @@
+# Python Bytecode Files
+__pycache__/
+*.py[cod]
+
+# Virtual Environment (venv)
+venv/
+env/
+
+# Django Secret & Config Files
+*.env
+.env
+config.json
+
+# Database Files
+db.sqlite3
+*.sqlite3
+
+# Migrations (only ignore generated Python cache, not actual migrations)
+**/migrations/__pycache__/
+
+# Static & Media Files
+staticfiles/
+media/
+
+# Compiled Files
+*.pyc
+*.pyo
+
+# Logs & Debugging Files
+*.log
+logs/
+debug.log
+
+# VSCode & IDE Specific Files
+.vscode/
+.idea/
+*.swp
+
+# Node Modules (if using React/Vue in Django)
+node_modules/
+
+# Other
+sanity.py
