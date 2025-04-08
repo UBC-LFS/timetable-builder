@@ -1,40 +1,114 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.utils.text import slugify
+from django.core.validators import MaxValueValidator, MinValueValidator
+from django.utils.translation import gettext_lazy as _
 
-class departments(models.Model):
-    department_id = models.AutoField(primary_key=True)
-    department_name = models.CharField(max_length=50, unique=True)
-    
-    class Meta:
-        db_table_comment = "Departments Table"
-    
-    def __str__(self):
-        return self.department_name
-    
-class courses(models.Model):
-    course_code = models.CharField(max_length=20, primary_key=True, null=False)
-    instructor = models.CharField(max_length=100, null=False)
-    time = models.JSONField(defualt=dict, null=False) 
-    # example: {"Monday": [10:00, 1], "Wednesday": [18:00, 2]}
-    # first index is the time, second index is the duration in hours
-    days = models.CharField(max_length=10, null=False)
-    
-    
-    class Meta:
-        db_table_comment = "Courses Table"
-    
-    def __str__(self):
-        return f"{self.course_code} - {self.instructor}"
-    # TODO: add a method to get the time in a more readable format
-    # TODO: add more fields to the course model
+import datetime as dt    
 
-class department_courses(models.Model):
-    department = models.ForeignKey(departments, on_delete=models.CASCADE)
-    course = models.ForeignKey(courses, on_delete=models.CASCADE)
-    
-    class Meta:
-        db_table_comment = "Department Courses Table"
-        unique_together = ("department", "course")
+class Term(models.Model):
+    code = models.CharField(max_length=20, unique=True)
+    name = models.CharField(max_length=256)
+    by_month = models.IntegerField(
+        default=4,
+        validators=[MinValueValidator(1), MaxValueValidator(12)]
+    )
+    max_hours = models.IntegerField(
+        default=192,
+        validators=[MinValueValidator(0), MaxValueValidator(4000)]
+    )
     
     def __str__(self):
-        return f"{self.department} requires {self.course}"
+        return self.code
+
+class CourseCode(models.Model):
+    """ Create a CourseCode model """
+    name = models.CharField(max_length=5, unique=True)
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+class CourseNumber(models.Model):
+    """ Create a CourseNumber model """
+    name = models.CharField(max_length=5, unique=True)
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+class CourseSection(models.Model):
+    """ Create a CourseSection model """
+    name = models.CharField(max_length=12, unique=True)
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+    
+class CourseName(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    
+    class Meta:
+        ordering = ['name']
+        
+    def __str__(self):
+        return self.name
+
+class Time(models.Model):
+    time = models.CharField(max_length=10, unique=True)
+    
+    class Meta:
+        ordering = ['time']
+        
+    def __str__(self):
+        return self.time
+
+class Day(models.Model):
+    day = models.CharField(max_length=10, unique=True)
+    
+    class Meta:
+        ordering = ['day']
+        
+    def __str__(self):
+        return self.day
+
+
+
+class Course(models.Model):
+    term = models.ForeignKey(Term, on_delete=models.DO_NOTHING)
+    code = models.ForeignKey(CourseCode, on_delete=models.DO_NOTHING)
+    name = models.ForeignKey(CourseName, on_delete=models.DO_NOTHING)
+    number = models.ForeignKey(CourseNumber, on_delete=models.DO_NOTHING)
+    section = models.ForeignKey(CourseSection, on_delete=models.DO_NOTHING)
+    start = models.ForeignKey(Time, on_delete=models.DO_NOTHING, related_name='courses_start')
+    end = models.ForeignKey(Time, on_delete=models.DO_NOTHING, related_name='courses_end')
+    day = models.ForeignKey(Day, on_delete=models.DO_NOTHING)
+    slug = models.SlugField(max_length=256, unique=True)
+    
+    def __str__(self):
+        return self.name
+    
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.code.name  + ' ' + self.number.name + ' ' + self.section.name + ' ' + self.name + ' ' + self.term.code)
+        super(Course, self).save(*args, **kwargs)
+
+
+class Program(models.Model):
+    short_code = models.CharField(max_length=5, unique=True)
+    full_name = models.CharField(max_length=50, unique=True)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    
+    
+    def __str__(self):
+        return self.full_name
+    
+
+
+
+    
+    
+
     
