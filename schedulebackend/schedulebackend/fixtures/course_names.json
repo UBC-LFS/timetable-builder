@@ -1,0 +1,38 @@
+[
+    {
+        "model": "scheduler.courseName",
+        "pk": 1,
+        "fields": {
+            "name": "Introduction to Land, Food, and Community"
+        }
+    },
+    {
+        "model": "scheduler.courseName",
+        "pk": 2,
+        "fields": {
+            "name": "Integrated Physiology for Human Nutrition I"
+        }
+    },
+    {
+        "model": "scheduler.courseName",
+        "pk": 3,
+        "fields": {
+            "name": "Integrated Physiology for Human Nutrition II"
+        }
+    },
+    {
+        "model": "scheduler.courseName",
+        "pk": 4,
+        "fields": {
+            "name": "Introduction to Soil Science"
+        }
+    },
+    {
+        "model":"scheduler.courseName",
+        "pk": 5,
+        "fields": {
+            "name": "Soil and the Global Environment"
+        }
+    }
+
+]

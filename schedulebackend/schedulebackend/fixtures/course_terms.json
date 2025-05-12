@@ -1,0 +1,23 @@
+[
+    {
+        "model": "scheduler.courseTerm",
+        "pk": 1,
+        "fields": {
+            "name": "W1"
+        }
+    },
+    {
+        "model": "scheduler.courseTerm",
+        "pk": 2,
+        "fields": {
+            "name": "W2"
+        }
+    },
+    {
+        "model": "scheduler.courseTerm",
+        "pk": 3,
+        "fields": {
+            "name": "SS"
+        }
+    }
+]

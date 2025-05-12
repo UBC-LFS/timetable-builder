@@ -6,20 +6,11 @@ from django.utils.translation import gettext_lazy as _
 
 import datetime as dt    
 
-class Term(models.Model):
-    code = models.CharField(max_length=20, unique=True)
+class CourseTerm(models.Model):
     name = models.CharField(max_length=256)
-    by_month = models.IntegerField(
-        default=4,
-        validators=[MinValueValidator(1), MaxValueValidator(12)]
-    )
-    max_hours = models.IntegerField(
-        default=192,
-        validators=[MinValueValidator(0), MaxValueValidator(4000)]
-    )
     
     def __str__(self):
-        return self.code
+        return self.name
 
 class CourseCode(models.Model):
     """ Create a CourseCode model """
@@ -57,35 +48,35 @@ class CourseName(models.Model):
     def __str__(self):
         return self.name
 
-class Time(models.Model):
-    time = models.CharField(max_length=10, unique=True)
+class CourseTime(models.Model):
+    name = models.CharField(max_length=10, unique=True)
     
     class Meta:
-        ordering = ['time']
+        ordering = ['name']
         
     def __str__(self):
-        return self.time
+        return self.name
 
-class Day(models.Model):
-    day = models.CharField(max_length=10, unique=True)
+class CourseDay(models.Model):
+    name = models.CharField(max_length=256, unique=True)
     
     class Meta:
-        ordering = ['day']
+        ordering = ['name']
         
     def __str__(self):
-        return self.day
+        return self.name
 
 
 
 class Course(models.Model):
-    term = models.ForeignKey(Term, on_delete=models.DO_NOTHING)
+    term = models.ForeignKey(CourseTerm, on_delete=models.DO_NOTHING)
     code = models.ForeignKey(CourseCode, on_delete=models.DO_NOTHING)
     name = models.ForeignKey(CourseName, on_delete=models.DO_NOTHING)
     number = models.ForeignKey(CourseNumber, on_delete=models.DO_NOTHING)
     section = models.ForeignKey(CourseSection, on_delete=models.DO_NOTHING)
-    start = models.ForeignKey(Time, on_delete=models.DO_NOTHING, related_name='courses_start')
-    end = models.ForeignKey(Time, on_delete=models.DO_NOTHING, related_name='courses_end')
-    day = models.ForeignKey(Day, on_delete=models.DO_NOTHING)
+    start = models.ForeignKey(CourseTime, on_delete=models.DO_NOTHING, related_name='courses_start')
+    end = models.ForeignKey(CourseTime, on_delete=models.DO_NOTHING, related_name='courses_end')
+    day = models.ForeignKey(CourseDay, on_delete=models.DO_NOTHING)
     slug = models.SlugField(max_length=256, unique=True)
     
     def __str__(self):
@@ -97,13 +88,11 @@ class Course(models.Model):
 
 
 class Program(models.Model):
-    short_code = models.CharField(max_length=5, unique=True)
-    full_name = models.CharField(max_length=50, unique=True)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    name = models.CharField(max_length=256, unique=True, null=True)
     
     
     def __str__(self):
-        return self.full_name
+        return self.name
     
 
 

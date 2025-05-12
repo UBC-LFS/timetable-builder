@@ -1,0 +1,31 @@
+[  
+    {
+        "model": "scheduler.Program",
+        "pk": 1,
+        "fields": {
+            "name": "FRE"
+        }
+    },
+    {
+        "model":"scheduler.Program",
+        "pk": 2,
+        "fields": {
+            "name": "FNH"
+        }
+    },
+    {
+        "model":"scheduler.Program",
+        "pk": 3,
+        "fields": {
+            "name": "APBI"
+        }
+    },
+    {
+        "model":"scheduler.Program",
+        "pk": 4,
+        "fields": {
+            "name": "GRS"
+        }
+    }
+  
+]
